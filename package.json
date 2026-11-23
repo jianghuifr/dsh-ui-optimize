@@ -1,6 +1,6 @@
 {
   "name": "@jianghuifr/dsh-ui-optimize",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Three measurable readability tweaks for the DeepSeek Harness Web UI: composer placeholder contrast, sidebar session timestamp type, and unselected session title hierarchy.",
   "keywords": [
     "dsh",

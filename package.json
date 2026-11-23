@@ -1,0 +1,72 @@
+{
+  "name": "@jianghuifr/dsh-ui-optimize",
+  "version": "0.1.0",
+  "description": "Three measurable readability tweaks for the DeepSeek Harness Web UI: composer placeholder contrast, sidebar session timestamp type, and unselected session title hierarchy.",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "ui",
+    "contrast",
+    "readability"
+  ],
+  "type": "module",
+  "main": "lib/index.js",
+  "icon": "icon.svg",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "lib/",
+    "locale/",
+    "docs/",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "verify": "npm run check && npm run lint && npm test",
+    "prepublishOnly": "npm run verify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jianghuifr/dsh-ui-optimize.git"
+  },
+  "homepage": "https://github.com/jianghuifr/dsh-ui-optimize#readme",
+  "bugs": {
+    "url": "https://github.com/jianghuifr/dsh-ui-optimize/issues"
+  },
+  "author": "jianghuifr",
+  "engines": {
+    "node": ">=22.19.0",
+    "dsh": ">=0.2.2-rc.1"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [],
+      "immediately": false
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.10.0"
+  }
+}

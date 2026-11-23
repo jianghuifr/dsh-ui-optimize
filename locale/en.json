@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "UI optimize",
+    "description": "Three measurable readability tweaks: composer placeholder contrast, sidebar session timestamp type, and a softer title for unselected session rows."
+  }
+}

@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      # The client bundle is a hand-written classic script that ships as-is, so
+      # its integrity check is a build gate here, not a test detail.
+      - run: npm run check
+
+  test:
+    name: test (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  package:
+    name: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      # A published artifact that cannot load is worse than no release, so the
+      # packed contents are asserted, not just the source tree.
+      - name: Pack and assert the payload
+        run: |
+          npm pack --dry-run
+          npm pack --pack-destination /tmp
+          tar -xzf /tmp/jianghuifr-dsh-ui-optimize-*.tgz -C /tmp
+          test -f /tmp/package/lib/index.js
+          test -f /tmp/package/lib/client.js
+          test -f /tmp/package/locale/en.json
+          test -f /tmp/package/locale/zh.json
+          test -f /tmp/package/icon.svg
+          grep -q '"@jianghuifr/dsh-ui-optimize"' /tmp/package/cordis.patch.yml
+          grep -q "@jianghuifr/dsh-ui-optimize" /tmp/package/lib/client.js
+          grep -q "_sidebarCol" /tmp/package/lib/client.js
+          grep -q "styleTweaks" /tmp/package/lib/client.js
+      - name: Ensure npm supports provenance
+        run: npm install -g npm@latest
+      # Dry-run the real release command. `--dry-run` checks the manifest and
+      # payload without uploading, so a brand-new package name cannot fail CI.
+      - name: Verify the release command (dry run)
+        run: npm publish --dry-run --access public

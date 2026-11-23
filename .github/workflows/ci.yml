@@ -63,7 +63,7 @@ jobs:
           test -f /tmp/package/locale/en.json
           test -f /tmp/package/locale/zh.json
           test -f /tmp/package/icon.svg
-          grep -q '"@jianghuifr/dsh-ui-optimize"' /tmp/package/cordis.patch.yml
+          grep -q "@jianghuifr/dsh-ui-optimize" /tmp/package/cordis.patch.yml
           grep -q "@jianghuifr/dsh-ui-optimize" /tmp/package/lib/client.js
           grep -q "_sidebarCol" /tmp/package/lib/client.js
           grep -q "styleTweaks" /tmp/package/lib/client.js
